@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -14,7 +15,7 @@ import { UsersModule } from './users/users.module';
       username: 'root',
       password: 'password',
       database: 'food_app',
-      entities: [],
+      entities: [User],
       synchronize: true,
     }),
     AuthModule,
