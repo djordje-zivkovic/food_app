@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -14,7 +21,13 @@ export class AuthController {
 
   @Post('/signup')
   async signup(@Body() body: CreateUserDto) {
-    return this.authService.signup(body.email, body.password);
+    return this.authService.signup(
+      body.email,
+      body.password,
+      body.name,
+      body.surname,
+      body.telephone_number,
+    );
   }
 
   @UseGuards(LocalAuthGuard)
@@ -22,10 +35,10 @@ export class AuthController {
   async login(@Body() body: CreateUserDto) {
     return this.authService.signin(body.email, body.password);
   }
-
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard) // Only logged user can access this route
   @Get('profile')
-  getProfile(@Body() body: CreateUserDto) {
-    return body;
+  getProfile(@Request() req) {
+    console.log(req);
+    return 'done';
   }
 }
