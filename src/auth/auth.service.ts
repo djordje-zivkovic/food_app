@@ -25,7 +25,7 @@ export class AuthService {
     const hash = (await scrypt(pass, salt, 32)) as Buffer;
 
     if (storedHash === hash.toString('hex')) {
-      const { password, ...result } = user;
+      const { password, ...result } = user; // get all information from user except from password
       return result;
     }
     return null;
@@ -63,11 +63,11 @@ export class AuthService {
       telephone_number,
     );
     // return the user
-    return this.signin(user1);
+    return this.login(user1);
   }
 
-  async signin(user: any) {
-    const payload = { sub: user.id };
+  async login(user: any) {
+    const payload = { sub: user.id, name: user.name };
 
     return {
       access_token: this.jwtService.sign(payload),

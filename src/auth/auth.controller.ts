@@ -35,11 +35,11 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   async login(@Request() req) {
-    return this.authService.signin(req.user);
+    return this.authService.login(req.user);
   }
   @UseGuards(JwtAuthGuard) // Only logged user can access this route
   @Get('profile')
   getProfile(@Request() req: any) {
-    return req.user.id;
+    return req.user.userId;
   }
 }
