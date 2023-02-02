@@ -7,9 +7,11 @@ import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { Restaurant } from './restaurant/restaurant.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '127.0.0.1',
