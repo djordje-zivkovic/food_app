@@ -9,6 +9,7 @@ import {
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { LoginUserDto } from './dtos/login-user.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 
@@ -32,7 +33,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  async login(@Body() body: CreateUserDto) {
+  async login(@Body() body: LoginUserDto) {
     return this.authService.signin(body.email, body.password);
   }
   @UseGuards(JwtAuthGuard) // Only logged user can access this route

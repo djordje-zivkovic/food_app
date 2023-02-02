@@ -1,5 +1,11 @@
-import { IsEmail, IsPhoneNumber, IsString, MinLength } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Restaurant } from 'src/restaurant/restaurant.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -15,4 +21,8 @@ export class User {
   surname: string;
   @Column()
   telephone_number: string;
+
+  @OneToOne(() => Restaurant)
+  @JoinColumn()
+  restaurant: Restaurant;
 }
