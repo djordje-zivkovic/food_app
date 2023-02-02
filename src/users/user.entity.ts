@@ -21,8 +21,4 @@ export class User {
   surname: string;
   @Column()
   telephone_number: string;
-
-  @OneToOne(() => Restaurant)
-  @JoinColumn()
-  restaurant: Restaurant;
 }

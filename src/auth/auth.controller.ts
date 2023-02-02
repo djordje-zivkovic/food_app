@@ -38,7 +38,7 @@ export class AuthController {
   }
   @UseGuards(JwtAuthGuard) // Only logged user can access this route
   @Get('profile')
-  getProfile(@Request() req) {
-    return 'done';
+  getProfile(@Request() req: any) {
+    return req.user.id;
   }
 }
