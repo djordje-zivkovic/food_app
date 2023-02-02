@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -33,8 +34,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  async login(@Body() body: LoginUserDto) {
-    return this.authService.signin(body.email, body.password);
+  async login(@Request() req) {
+    return this.authService.signin(req.user);
   }
   @UseGuards(JwtAuthGuard) // Only logged user can access this route
   @Get('profile')

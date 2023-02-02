@@ -20,12 +20,17 @@ export class AuthService {
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findByEmail(email);
 
-    if (user && user.password === pass) {
+    const [salt, storedHash] = user.password.split('.');
+
+    const hash = (await scrypt(pass, salt, 32)) as Buffer;
+
+    if (storedHash === hash.toString('hex')) {
       const { password, ...result } = user;
       return result;
     }
-    return user;
+    return null;
   }
+
   async signup(
     email: string,
     password: string,
@@ -58,27 +63,14 @@ export class AuthService {
       telephone_number,
     );
     // return the user
-    return user1;
+    return this.signin(user1);
   }
 
-  async signin(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+  async signin(user: any) {
+    const payload = { sub: user.id };
 
-    const [salt, storedHash] = user.password.split('.');
-
-    const hash = (await scrypt(password, salt, 32)) as Buffer;
-
-    const payload = { userId: user.id };
-
-    if (storedHash !== hash.toString('hex')) {
-      throw new BadRequestException('bad password');
-    } else {
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
-    }
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }
