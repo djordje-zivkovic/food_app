@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
+import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { promisify } from 'util';
 
@@ -43,18 +44,12 @@ export class AuthService {
       throw new BadRequestException('email in use');
     }
 
-    // hash the users password //
-
-    // Generate a salt
     const salt = randomBytes(8).toString('hex');
 
-    // Hash the salt and password together
     const hash = (await scrypt(password, salt, 32)) as Buffer;
 
-    // Join the hashed result and the salt together
     const result = salt + '.' + hash.toString('hex');
 
-    // create a new user and save it
     const user1 = await this.usersService.create(
       email,
       result,
@@ -62,11 +57,10 @@ export class AuthService {
       surname,
       telephone_number,
     );
-    // return the user
     return this.login(user1);
   }
 
-  async login(user: any) {
+  async login(user: User) {
     const payload = { sub: user.id, name: user.name };
 
     return {
