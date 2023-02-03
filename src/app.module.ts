@@ -8,6 +8,10 @@ import { UsersModule } from './users/users.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { Restaurant } from './restaurant/restaurant.entity';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guards/roles.guard';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { JWTModule } from './auth/JWT.module';
 
 @Module({
   imports: [
@@ -26,8 +30,9 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     UsersModule,
     RestaurantModule,
+    JWTModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy],
 })
 export class AppModule {}

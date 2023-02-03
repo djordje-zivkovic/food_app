@@ -1,3 +1,4 @@
+import { Role } from 'src/enums/role.enum';
 import { Restaurant } from 'src/restaurant/restaurant.entity';
 import {
   Column,
@@ -22,6 +23,13 @@ export class User {
   surname: string;
   @Column()
   telephone_number: string;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.Admin,
+  })
+  role: Role;
 
   @OneToMany(() => Restaurant, (restaurant) => restaurant.user)
   restaurants: Restaurant[];

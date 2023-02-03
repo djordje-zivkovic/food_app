@@ -1,4 +1,11 @@
-import { IsEmail, IsMobilePhone, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsMobilePhone,
+  IsString,
+} from 'class-validator';
+import { Role } from 'src/enums/role.enum';
 
 export class CreateUserDto {
   @IsEmail()
@@ -12,4 +19,6 @@ export class CreateUserDto {
   @IsMobilePhone()
   @IsString()
   telephone_number: string;
+  @IsEnum(Role)
+  role: Role;
 }

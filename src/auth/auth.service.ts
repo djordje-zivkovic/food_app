@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
+import { Role } from 'src/enums/role.enum';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { promisify } from 'util';
@@ -38,6 +39,7 @@ export class AuthService {
     name: string,
     surname: string,
     telephone_number: string,
+    role: Role,
   ) {
     let user = await this.usersService.findByEmail(email);
     if (user) {
@@ -56,12 +58,14 @@ export class AuthService {
       name,
       surname,
       telephone_number,
+      role,
     );
     return this.login(user1);
   }
 
   async login(user: User) {
-    const payload = { sub: user.id, name: user.name };
+    const payload = { sub: user.id, name: user.name, role: user.role };
+    console.log('login-payload', payload);
 
     return {
       access_token: this.jwtService.sign(payload),

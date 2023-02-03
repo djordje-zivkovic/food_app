@@ -29,6 +29,7 @@ export class AuthController {
       body.name,
       body.surname,
       body.telephone_number,
+      body.role,
     );
   }
 
