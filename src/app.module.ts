@@ -14,6 +14,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import { JWTModule } from './auth/JWT.module';
 import { ReviewModule } from './review/review.module';
 import { Review } from './review/review.entity';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Review } from './review/review.entity';
     RestaurantModule,
     JWTModule,
     ReviewModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
