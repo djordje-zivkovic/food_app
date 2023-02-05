@@ -5,12 +5,16 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
-import { Role } from 'src/enums/role.enum';
-import { User } from 'src/users/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { Role } from '../enums/role.enum';
+import { User } from '../users/user.entity';
 import { promisify } from 'util';
+import { UsersService } from '../users/users.service';
 
 const scrypt = promisify(_scrypt);
+
+interface IUser extends User {
+  password: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -20,7 +24,10 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmail(email, true);
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
 
     const [salt, storedHash] = user.password.split('.');
 
@@ -64,8 +71,7 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { sub: user.id, name: user.name, role: user.role };
-    console.log('login-payload', payload);
+    const payload = { userId: user.id, name: user.name, role: user.role };
 
     return {
       access_token: this.jwtService.sign(payload),

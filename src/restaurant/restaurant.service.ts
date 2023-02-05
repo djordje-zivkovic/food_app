@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/user.entity';
-import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
+import { UsersService } from '../users/users.service';
 import { createRestaurantDto } from './dtos/create-restaurant.dto';
 import { Restaurant } from './restaurant.entity';
 
@@ -16,6 +15,9 @@ export class RestaurantService {
   async create(reportDto: createRestaurantDto) {
     const restaurant = this.repo.create(reportDto);
     restaurant.user = await this.usersService.FindById(reportDto.userId);
+    if (!restaurant.user) {
+      throw new NotFoundException('user not found');
+    }
     return this.repo.save(restaurant);
   }
 

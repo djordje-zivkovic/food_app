@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from 'src/enums/role.enum';
 import { Repository } from 'typeorm';
+import { Role } from '../enums/role.enum';
 import { User } from './user.entity';
 
 @Injectable()
@@ -28,14 +28,14 @@ export class UsersService {
   }
 
   async FindById(id: number) {
-    const user1 = await this.repo.findOneBy({ id });
-    if (!user1) {
-      throw new NotFoundException('User not found');
-    }
-    return user1;
+    return await this.repo.findOneBy({ id });
   }
 
-  async findByEmail(email: string) {
-    return this.repo.findOneBy({ email });
+  async findByEmail(email: string, includePassword = false) {
+    return await this.repo
+      .createQueryBuilder()
+      .where({ email: email })
+      .addSelect(includePassword ? 'User.password' : null)
+      .getOne();
   }
 }

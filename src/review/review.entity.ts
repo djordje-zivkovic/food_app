@@ -2,18 +2,16 @@ import { User } from '../users/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Restaurant {
+export class Review {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  address: string;
+  atmosphere: string;
   @Column()
-  workinghours: string;
+  general_impression: string;
   @Column()
-  category: string;
-  @Column()
-  photo: string;
+  comment: string;
 
-  @ManyToOne(() => User, (user) => user.restaurants)
+  @ManyToOne(() => User, (user) => user.reviews)
   user: User;
 }

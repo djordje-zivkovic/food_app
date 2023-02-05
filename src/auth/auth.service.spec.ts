@@ -19,15 +19,4 @@ describe('AuthService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
-  it('find users by their email', () => {});
-
-  //   it('should return user information if email and password are correct', async () => {
-  //     const email = 'admin@gmail.com';
-  //     const password = 'password';
-
-  //     const result = await service.validateUser(email, password);
-  //     expect(result).not.toBe('null');
-  //     expect(result).toMatchObject(['id', 'email']);
-  //   });
 });

@@ -1,5 +1,7 @@
-import { Role } from 'src/enums/role.enum';
-import { Restaurant } from 'src/restaurant/restaurant.entity';
+import { Exclude } from 'class-transformer';
+import { Role } from '../enums/role.enum';
+import { Restaurant } from '../restaurant/restaurant.entity';
+import { Review } from '../review/review.entity';
 import {
   Column,
   Entity,
@@ -15,7 +17,7 @@ export class User {
   id: number;
   @Column()
   email: string;
-  @Column()
+  @Column({ select: false })
   password: string;
   @Column()
   name: string;
@@ -33,4 +35,7 @@ export class User {
 
   @OneToMany(() => Restaurant, (restaurant) => restaurant.user)
   restaurants: Restaurant[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
 }

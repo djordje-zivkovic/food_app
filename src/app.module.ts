@@ -12,6 +12,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { JWTModule } from './auth/JWT.module';
+import { ReviewModule } from './review/review.module';
+import { Review } from './review/review.entity';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { JWTModule } from './auth/JWT.module';
       username: 'root',
       password: 'password',
       database: 'food_app',
-      entities: [User, Restaurant],
+      entities: [User, Restaurant, Review],
       synchronize: true,
       autoLoadEntities: true,
     }),
@@ -31,6 +33,7 @@ import { JWTModule } from './auth/JWT.module';
     UsersModule,
     RestaurantModule,
     JWTModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
