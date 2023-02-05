@@ -15,6 +15,7 @@ import { JWTModule } from './auth/JWT.module';
 import { ReviewModule } from './review/review.module';
 import { Review } from './review/review.entity';
 import { OrderModule } from './order/order.module';
+import { Order } from './order/order.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { OrderModule } from './order/order.module';
       username: 'root',
       password: 'password',
       database: 'food_app',
-      entities: [User, Restaurant, Review],
+      entities: [User, Restaurant, Review, Order],
       synchronize: true,
       autoLoadEntities: true,
     }),
