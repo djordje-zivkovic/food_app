@@ -16,6 +16,8 @@ import { ReviewModule } from './review/review.module';
 import { Review } from './review/review.entity';
 import { OrderModule } from './order/order.module';
 import { Order } from './order/order.entity';
+import { DailyMenuModule } from './daily-menu/daily-menu.module';
+import { DailyMenu } from './daily-menu/daily-menu.entity';
 
 @Module({
   imports: [
@@ -27,7 +29,7 @@ import { Order } from './order/order.entity';
       username: 'root',
       password: 'password',
       database: 'food_app',
-      entities: [User, Restaurant, Review, Order],
+      entities: [User, Restaurant, Review, Order, DailyMenu],
       synchronize: true,
       autoLoadEntities: true,
     }),
@@ -37,6 +39,7 @@ import { Order } from './order/order.entity';
     JWTModule,
     ReviewModule,
     OrderModule,
+    DailyMenuModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
