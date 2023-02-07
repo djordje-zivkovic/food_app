@@ -10,15 +10,6 @@ export class DailyMenuService {
     @InjectRepository(DailyMenu) private repo: Repository<DailyMenu>,
   ) {}
 
-  // async create(reviewDto: CreateReviewDto, request) {
-  //     const review = this.repo.create(reviewDto);
-  //     review.user = await this.userService.FindById(request.user.userId);
-  //     if (!review.user) {
-  //       throw new NotFoundException('user not found');
-  //     }
-  //     return this.repo.save(review);
-  //   }
-
   async create(dailyMenuDto: CreateDailyMenuDto) {
     const dailyMenu = this.repo.create(dailyMenuDto);
     return this.repo.save(dailyMenu);

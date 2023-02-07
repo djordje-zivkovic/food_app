@@ -8,8 +8,6 @@ import { UsersModule } from './users/users.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { Restaurant } from './restaurant/restaurant.entity';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './guards/roles.guard';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { JWTModule } from './auth/JWT.module';
 import { ReviewModule } from './review/review.module';
@@ -18,6 +16,8 @@ import { OrderModule } from './order/order.module';
 import { Order } from './order/order.entity';
 import { DailyMenuModule } from './daily-menu/daily-menu.module';
 import { DailyMenu } from './daily-menu/daily-menu.entity';
+import { MealModule } from './meal/meal.module';
+import { Meal } from './meal/meal.entity';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { DailyMenu } from './daily-menu/daily-menu.entity';
       username: 'root',
       password: 'password',
       database: 'food_app',
-      entities: [User, Restaurant, Review, Order, DailyMenu],
+      entities: [User, Restaurant, Review, Order, DailyMenu, Meal],
       synchronize: true,
       autoLoadEntities: true,
     }),
@@ -40,6 +40,7 @@ import { DailyMenu } from './daily-menu/daily-menu.entity';
     ReviewModule,
     OrderModule,
     DailyMenuModule,
+    MealModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],

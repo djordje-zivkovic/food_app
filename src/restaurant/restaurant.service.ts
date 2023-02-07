@@ -28,4 +28,17 @@ export class RestaurantService {
       },
     });
   }
+
+  async GetRestaurantById(id: number, userId: number) {
+    console.log('getrestaurantbyId: ', id, userId);
+    const restaurant = await this.repo.find({
+      where: [{ id: id, userId: userId }],
+    });
+
+    return restaurant[0];
+  }
+
+  //   async GetRestaurantOwner(id: number, userId: number) {
+  //     return this.repo.findOne({});
+  //   }
 }

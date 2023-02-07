@@ -1,5 +1,13 @@
 import { User } from '../users/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Meal } from '../meal/meal.entity';
 
 @Entity()
 export class Restaurant {
@@ -13,7 +21,13 @@ export class Restaurant {
   category: string;
   @Column()
   photo: string;
+  @Column({ nullable: true })
+  userId: number;
 
-  @ManyToOne(() => User, (user) => user.restaurants)
+  @ManyToOne(() => User, (user) => user.restaurants, { eager: true })
+  @JoinColumn()
   user: User;
+
+  @OneToMany(() => Meal, (meal) => meal.restaurant)
+  meals: Meal[];
 }
