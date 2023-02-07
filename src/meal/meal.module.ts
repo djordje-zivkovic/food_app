@@ -8,6 +8,7 @@ import { MealService } from './meal.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Meal]), RestaurantModule],
+  exports: [MealService],
   controllers: [MealController],
   providers: [MealService],
 })

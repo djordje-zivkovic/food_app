@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { UsersService } from '../users/users.service';
 import { CreateMealDto } from './dtos/create-meal.dto';
@@ -15,8 +15,7 @@ export class MealService {
 
   async create(mealDto: CreateMealDto, userId) {
     const meal = await this.repo.create(mealDto);
-    console.log('mealDto : ', mealDto.restaurantId, 'userId :', userId);
-    meal.restaurant = await this.restaurantService.GetRestaurantById(
+    meal.restaurant = await this.restaurantService.GetRestaurantByIdandUserId(
       mealDto.restaurantId,
       userId,
     );
@@ -26,5 +25,18 @@ export class MealService {
       );
     }
     return await this.repo.save(meal);
+  }
+
+  async getMealbyId(id: number[]) {
+    const meals = await this.repo.find({ where: { id: In(id) } });
+    return meals;
+  }
+
+  async getAllMeal() {
+    return this.repo.find({
+      relations: {
+        restaurant: true,
+      },
+    });
   }
 }

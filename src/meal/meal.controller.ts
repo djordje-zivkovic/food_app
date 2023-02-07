@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../decorators/role.decorator';
 import { Role } from '../enums/role.enum';
@@ -22,5 +22,10 @@ export class MealController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   createMeal(@Body() body: CreateMealDto, @Req() request) {
     return this.mealService.create(body, request.user.userId);
+  }
+
+  @Get()
+  getAllMeal() {
+    return this.mealService.getAllMeal();
   }
 }

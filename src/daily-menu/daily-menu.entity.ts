@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Meal } from '../meal/meal.entity';
+import { Restaurant } from '../restaurant/restaurant.entity';
 
 @Entity()
 export class DailyMenu {
@@ -6,4 +15,12 @@ export class DailyMenu {
   id: string;
   @Column()
   date: string;
+
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.dailymenus)
+  restaurant: Restaurant;
+
+  @ManyToMany(() => Meal, (meal) => meal.dailymenus)
+  @JoinTable()
+  meals: Meal[];
+  dailyMenu: Meal;
 }

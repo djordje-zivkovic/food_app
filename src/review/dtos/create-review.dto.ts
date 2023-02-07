@@ -7,4 +7,6 @@ export class CreateReviewDto {
   general_impression: string;
   @IsString()
   comment: string;
+  @IsNumber()
+  restaurantId: number;
 }

@@ -1,5 +1,6 @@
 import { User } from '../users/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Restaurant } from '../restaurant/restaurant.entity';
 
 @Entity()
 export class Review {
@@ -11,6 +12,9 @@ export class Review {
   general_impression: string;
   @Column()
   comment: string;
+
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.reviews)
+  restaurant: Restaurant;
 
   @ManyToOne(() => User, (user) => user.reviews)
   user: User;

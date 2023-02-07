@@ -27,7 +27,16 @@ export class UsersService {
     return this.repo.save(user);
   }
 
-  async FindById(id: number) {
+  async findAllUsers() {
+    return await this.repo.find({
+      relations: {
+        restaurants: true,
+        reviews: true,
+      },
+    });
+  }
+
+  async findById(id: number) {
     return await this.repo.findOneBy({ id });
   }
 

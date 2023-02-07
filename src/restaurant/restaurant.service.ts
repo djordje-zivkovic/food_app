@@ -14,7 +14,7 @@ export class RestaurantService {
 
   async create(reportDto: createRestaurantDto) {
     const restaurant = this.repo.create(reportDto);
-    restaurant.user = await this.usersService.FindById(reportDto.userId);
+    restaurant.user = await this.usersService.findById(reportDto.userId);
     if (!restaurant.user) {
       throw new NotFoundException('user not found');
     }
@@ -29,16 +29,17 @@ export class RestaurantService {
     });
   }
 
-  async GetRestaurantById(id: number, userId: number) {
-    console.log('getrestaurantbyId: ', id, userId);
-    const restaurant = await this.repo.find({
-      where: [{ id: id, userId: userId }],
-    });
-
-    return restaurant[0];
+  async getRestaurantById(id: number) {
+    return await this.repo.findOneBy({ id });
   }
 
-  //   async GetRestaurantOwner(id: number, userId: number) {
-  //     return this.repo.findOne({});
-  //   }
+  async GetRestaurantByIdandUserId(id: number, userId: number) {
+    const restaurant = await this.repo.findOne({
+      where: [{ id: id, userId: userId }],
+    });
+    if (!restaurant) {
+      throw new NotFoundException('Restaurant not found');
+    }
+    return restaurant;
+  }
 }
