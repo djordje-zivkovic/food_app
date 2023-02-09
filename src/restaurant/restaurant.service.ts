@@ -1,6 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Role } from '../enums/role.enum';
 import { UsersService } from '../users/users.service';
 import { createRestaurantDto } from './dtos/create-restaurant.dto';
 import { Restaurant } from './restaurant.entity';
@@ -17,6 +23,9 @@ export class RestaurantService {
     restaurant.user = await this.usersService.findById(reportDto.userId);
     if (!restaurant.user) {
       throw new NotFoundException('user not found');
+    }
+    if (restaurant.user.role !== Role.Owner) {
+      throw new BadRequestException('Only owners can have restaurant');
     }
     return this.repo.save(restaurant);
   }
@@ -41,5 +50,18 @@ export class RestaurantService {
       throw new NotFoundException('Restaurant not found');
     }
     return restaurant;
+  }
+
+  async validateRestaurantOwnership(userId, restaurantId) {
+    const loggedUser = await this.usersService.findById(userId);
+    const restaurant = await this.getRestaurantById(restaurantId);
+    if (!restaurant) {
+      throw new BadRequestException('The specified restaurant does not exist');
+    }
+    if (!loggedUser.restaurants.some((r) => r.id === restaurant.id)) {
+      throw new UnauthorizedException(
+        "You can't create meals in restaurants which you do not own",
+      );
+    }
   }
 }

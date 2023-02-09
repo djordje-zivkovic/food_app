@@ -10,6 +10,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Order } from '../order/order.entity';
 
 @Entity()
 export class User {
@@ -32,6 +33,9 @@ export class User {
     default: Role.Client,
   })
   role: Role;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   @OneToMany(() => Restaurant, (restaurant) => restaurant.user)
   restaurants: Restaurant[];

@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { RestaurantService } from '../restaurant/restaurant.service';
@@ -11,13 +16,18 @@ export class MealService {
   constructor(
     @InjectRepository(Meal) private repo: Repository<Meal>,
     private restaurantService: RestaurantService,
+    private userService: UsersService,
   ) {}
 
-  async create(mealDto: CreateMealDto, userId) {
+  async create(mealDto: CreateMealDto, request) {
+    await this.restaurantService.validateRestaurantOwnership(
+      request.user.userId,
+      mealDto.restaurantId,
+    );
     const meal = await this.repo.create(mealDto);
     meal.restaurant = await this.restaurantService.GetRestaurantByIdandUserId(
       mealDto.restaurantId,
-      userId,
+      request.user.userId,
     );
     if (!meal.restaurant) {
       throw new NotFoundException(
@@ -27,7 +37,7 @@ export class MealService {
     return await this.repo.save(meal);
   }
 
-  async getMealbyId(id: number[]) {
+  async getMealsbyId(id: number[]) {
     const meals = await this.repo.find({ where: { id: In(id) } });
     return meals;
   }

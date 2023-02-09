@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../decorators/role.decorator';
 import { Role } from '../enums/role.enum';
@@ -13,8 +21,8 @@ export class DailyMenuController {
   @Post()
   @Roles(Role.Owner)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  createDailyMenu(@Body() body: CreateDailyMenuDto) {
-    return this.dailyMenuService.create(body);
+  createDailyMenu(@Body() body: CreateDailyMenuDto, @Req() request) {
+    return this.dailyMenuService.create(body, request);
   }
 
   @Get()

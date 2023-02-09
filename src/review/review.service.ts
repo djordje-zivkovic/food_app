@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from '../users/users.service';
 import { Repository } from 'typeorm';
 import { CreateReviewDto } from './dtos/create-review.dto';
 import { Review } from './review.entity';
 import { RestaurantService } from '../restaurant/restaurant.service';
+import { Role } from '../enums/role.enum';
 
 @Injectable()
 export class ReviewService {
@@ -15,6 +21,9 @@ export class ReviewService {
   ) {}
 
   async create(reviewDto: CreateReviewDto, request) {
+    if (request.user.role !== Role.Client) {
+      throw new UnauthorizedException('Only client can create a review');
+    }
     const review = this.repo.create(reviewDto);
     review.restaurant = await this.restaurantService.getRestaurantById(
       reviewDto.restaurantId,

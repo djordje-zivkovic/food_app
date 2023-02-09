@@ -32,12 +32,16 @@ export class UsersService {
       relations: {
         restaurants: true,
         reviews: true,
+        orders: true,
       },
     });
   }
 
   async findById(id: number) {
-    return await this.repo.findOneBy({ id });
+    return await this.repo.findOne({
+      where: { id },
+      relations: { restaurants: true },
+    });
   }
 
   async findByEmail(email: string, includePassword = false) {

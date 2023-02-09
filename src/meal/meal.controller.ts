@@ -21,7 +21,7 @@ export class MealController {
   @Roles(Role.Owner)
   @UseGuards(JwtAuthGuard, RolesGuard)
   createMeal(@Body() body: CreateMealDto, @Req() request) {
-    return this.mealService.create(body, request.user.userId);
+    return this.mealService.create(body, request);
   }
 
   @Get()
