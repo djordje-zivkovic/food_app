@@ -1,7 +1,10 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -22,6 +25,15 @@ export class RestaurantController {
   @Post()
   createRestaurant(@Body() body: createRestaurantDto) {
     return this.restaurantService.create(body);
+  }
+
+  @Delete(':id')
+  deleteRestaurant(@Param('id') id) {
+    console.log(id);
+    if (!id) {
+      throw new BadRequestException('You have to enter id');
+    }
+    return this.restaurantService.deleteRestaurant(id);
   }
 
   @Get()

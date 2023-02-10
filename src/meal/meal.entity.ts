@@ -21,6 +21,8 @@ export class Meal {
   price: string;
   @Column()
   photo: string;
+  @Column()
+  category: string;
 
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.meals)
   restaurant: Restaurant;

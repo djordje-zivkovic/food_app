@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -40,6 +41,11 @@ export class AuthController {
   @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async signupAdminOrOwner(@Body() body: CreateAdminOrOwner) {
+    if (body.role !== Role.Admin && body.role !== Role.Owner) {
+      throw new BadRequestException(
+        'Invalid role provided, only Admin or Owner allowed',
+      );
+    }
     return this.authService.signup(
       body.email,
       body.password,

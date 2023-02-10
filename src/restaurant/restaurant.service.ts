@@ -30,6 +30,19 @@ export class RestaurantService {
     return this.repo.save(restaurant);
   }
 
+  async deleteRestaurant(id: number) {
+    const restaurant = await this.repo.findOneBy({ id });
+    if (!restaurant) {
+      throw new NotFoundException('Restaurant not found');
+    }
+    return this.repo
+      .createQueryBuilder('restaurant')
+      .delete()
+      .from(Restaurant)
+      .where({ id })
+      .execute();
+  }
+
   async getRestaurants() {
     return this.repo.find({
       relations: {

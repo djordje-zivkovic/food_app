@@ -9,6 +9,7 @@ import { In, Repository } from 'typeorm';
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { UsersService } from '../users/users.service';
 import { CreateMealDto } from './dtos/create-meal.dto';
+import { UpdateMealDto } from './dtos/update-meal.dto';
 import { Meal } from './meal.entity';
 
 @Injectable()
@@ -37,8 +38,39 @@ export class MealService {
     return await this.repo.save(meal);
   }
 
+  async updateMeal(id, mealDto: UpdateMealDto, request) {
+    const meal = await this.getMealById(id);
+    await this.restaurantService.validateRestaurantOwnership(
+      request.user.userId,
+      meal.restaurant.id,
+    );
+    return await this.repo
+      .createQueryBuilder()
+      .update(Meal)
+      .set(mealDto)
+      .execute();
+  }
+
+  async getMealById(id: number) {
+    const meal = await this.repo.findOne({
+      where: [{ id }],
+      relations: {
+        restaurant: true,
+      },
+    });
+    if (!meal) {
+      throw new NotFoundException('Meal not found');
+    }
+    return meal;
+  }
+
   async getMealsbyId(id: number[]) {
-    const meals = await this.repo.find({ where: { id: In(id) } });
+    const meals = await this.repo.find({
+      where: { id: In(id) },
+      relations: {
+        restaurant: true,
+      },
+    });
     return meals;
   }
 

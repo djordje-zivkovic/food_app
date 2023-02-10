@@ -1,18 +1,21 @@
-import { IsEnum, IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Column } from 'typeorm';
 import { Category } from '../../enums/category.enum';
 
-export class CreateMealDto {
+export class UpdateMealDto {
+  @IsOptional()
   @IsString()
   description: string;
   @IsString()
+  @IsOptional()
   name: string;
   @IsString()
+  @IsOptional()
   price: string;
   @IsString()
+  @IsOptional()
   photo: string;
-  @IsNumber()
-  restaurantId: number;
   @IsEnum(Category)
+  @IsOptional()
   category: Category;
 }
