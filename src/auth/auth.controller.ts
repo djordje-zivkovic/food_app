@@ -8,7 +8,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
+import { Roles } from '../decorators/role.decorator';
+import { Role } from '../enums/role.enum';
+import { RolesGuard } from '../guards/roles.guard';
 import { AuthService } from './auth.service';
+import { CreateAdminOrOwner } from './dtos/create-admin-or-owner.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -23,6 +27,19 @@ export class AuthController {
 
   @Post('/signup')
   async signup(@Body() body: CreateUserDto) {
+    return this.authService.signup(
+      body.email,
+      body.password,
+      body.name,
+      body.surname,
+      body.telephone_number,
+    );
+  }
+
+  @Post('/createAdminOrOwner')
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async signupAdminOrOwner(@Body() body: CreateAdminOrOwner) {
     return this.authService.signup(
       body.email,
       body.password,

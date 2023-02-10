@@ -12,10 +12,6 @@ import { UsersService } from '../users/users.service';
 
 const scrypt = promisify(_scrypt);
 
-interface IUser extends User {
-  password: string;
-}
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -46,9 +42,9 @@ export class AuthService {
     name: string,
     surname: string,
     telephone_number: string,
-    role: Role,
+    role: Role = Role.Client,
   ) {
-    let user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmail(email);
     if (user) {
       throw new BadRequestException('email in use');
     }

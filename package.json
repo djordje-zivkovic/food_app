@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@casl/ability": "^6.3.3",
     "@golevelup/ts-jest": "^0.3.4",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.0",
