@@ -16,6 +16,8 @@ export class Restaurant {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
+  name: string;
+  @Column()
   address: string;
   @Column()
   workinghours: string;

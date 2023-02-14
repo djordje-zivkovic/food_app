@@ -12,6 +12,8 @@ export class Review {
   general_impression: string;
   @Column()
   comment: string;
+  @Column()
+  restaurantId: number;
 
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.reviews)
   restaurant: Restaurant;

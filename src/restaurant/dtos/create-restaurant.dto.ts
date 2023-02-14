@@ -3,6 +3,8 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class createRestaurantDto {
   @IsString()
+  name: string;
+  @IsString()
   address: string;
   @IsString()
   workinghours: string;

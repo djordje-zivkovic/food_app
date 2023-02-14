@@ -28,6 +28,19 @@ export class ReviewService {
     review.restaurant = await this.restaurantService.getRestaurantById(
       reviewDto.restaurantId,
     );
+
+    const existingReview = await this.repo.findOne({
+      where: [
+        { user: request.user.userId },
+        { restaurantId: reviewDto.restaurantId },
+      ],
+    });
+    if (existingReview) {
+      throw new BadRequestException(
+        'User has already reviewed this restaurant',
+      );
+    }
+
     if (!review.restaurant) {
       throw new NotFoundException('restaurant not found');
     }
@@ -42,6 +55,7 @@ export class ReviewService {
     return await this.repo.find({
       relations: {
         user: true,
+        restaurant: true,
       },
     });
   }

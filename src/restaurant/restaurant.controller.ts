@@ -32,7 +32,6 @@ export class RestaurantController {
 
   @Delete(':id')
   deleteRestaurant(@Param('id') id) {
-    console.log(id);
     if (!id) {
       throw new BadRequestException('You have to enter id');
     }
