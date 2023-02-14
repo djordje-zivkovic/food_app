@@ -21,39 +21,21 @@ import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private userService: UsersService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Post('/signup')
   async signup(@Body() body: CreateUserDto) {
-    return this.authService.signup(
-      body.email,
-      body.password,
-      body.name,
-      body.surname,
-      body.telephone_number,
-    );
+    return this.authService.signup(body);
   }
 
   @Post('/createAdminOrOwner')
-  @Roles(Role.Admin)
-  @UseGuards(JwtAuthGuard, RolesGuard)
   async signupAdminOrOwner(@Body() body: CreateAdminOrOwner) {
-    if (body.role !== Role.Admin && body.role !== Role.Owner) {
+    if (body.role !== Role.ADMIN && body.role !== Role.OWNER) {
       throw new BadRequestException(
         'Invalid role provided, only Admin or Owner allowed',
       );
     }
-    return this.authService.signup(
-      body.email,
-      body.password,
-      body.name,
-      body.surname,
-      body.telephone_number,
-      body.role,
-    );
+    return this.authService.signup(body);
   }
 
   @UseGuards(LocalAuthGuard)

@@ -11,7 +11,7 @@ export class ReviewController {
   constructor(private reviewService: ReviewService) {}
 
   @Post()
-  @Roles(Role.Client)
+  @Roles(Role.CLIENT)
   @UseGuards(JwtAuthGuard, RolesGuard)
   createReview(@Body() body: CreateReviewDto, @Req() request) {
     return this.reviewService.create(body, request);

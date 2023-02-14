@@ -11,7 +11,7 @@ export class OrderController {
   constructor(private orderService: OrderService) {}
 
   @Post()
-  @Roles(Role.Client)
+  @Roles(Role.CLIENT)
   @UseGuards(JwtAuthGuard, RolesGuard)
   createOrder(@Body() body: CreateOrderDto, @Req() request) {
     return this.orderService.createOrder(body, request);

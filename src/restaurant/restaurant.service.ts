@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { Role } from '../enums/role.enum';
 import { UsersService } from '../users/users.service';
 import { createRestaurantDto } from './dtos/create-restaurant.dto';
+import { updateRestaurantDto } from './dtos/update-restaurant.dto';
 import { Restaurant } from './restaurant.entity';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class RestaurantService {
     if (!restaurant.user) {
       throw new NotFoundException('user not found');
     }
-    if (restaurant.user.role !== Role.Owner) {
+    if (restaurant.user.role !== Role.OWNER) {
       throw new BadRequestException('Only owners can have restaurant');
     }
     return this.repo.save(restaurant);
@@ -65,6 +66,21 @@ export class RestaurantService {
     return restaurant;
   }
 
+  async updateRestaurant(
+    restaurantId: number,
+    body: updateRestaurantDto,
+    userId: number,
+  ) {
+    await this.validateRestaurantOwnership(userId, restaurantId);
+
+    return await this.repo
+      .createQueryBuilder()
+      .update(Restaurant)
+      .set(body)
+      .where('id = :id', { id: restaurantId })
+      .execute();
+  }
+
   async validateRestaurantOwnership(userId, restaurantId) {
     const loggedUser = await this.usersService.findById(userId);
     const restaurant = await this.getRestaurantById(restaurantId);
@@ -72,9 +88,7 @@ export class RestaurantService {
       throw new BadRequestException('The specified restaurant does not exist');
     }
     if (!loggedUser.restaurants.some((r) => r.id === restaurant.id)) {
-      throw new UnauthorizedException(
-        "You can't create meals in restaurants which you do not own",
-      );
+      throw new UnauthorizedException('You do not own this restaurant');
     }
   }
 }

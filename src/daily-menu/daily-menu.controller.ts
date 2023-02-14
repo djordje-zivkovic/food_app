@@ -19,7 +19,7 @@ export class DailyMenuController {
   constructor(private dailyMenuService: DailyMenuService) {}
 
   @Post()
-  @Roles(Role.Owner)
+  @Roles(Role.OWNER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   createDailyMenu(@Body() body: CreateDailyMenuDto, @Req() request) {
     return this.dailyMenuService.create(body, request);

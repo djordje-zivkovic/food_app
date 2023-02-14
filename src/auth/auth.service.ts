@@ -36,32 +36,25 @@ export class AuthService {
     return null;
   }
 
-  async signup(
-    email: string,
-    password: string,
-    name: string,
-    surname: string,
-    telephone_number: string,
-    role: Role = Role.Client,
-  ) {
-    const user = await this.usersService.findByEmail(email);
+  async signup(body) {
+    const user = await this.usersService.findByEmail(body.email);
     if (user) {
       throw new BadRequestException('email in use');
     }
 
     const salt = randomBytes(8).toString('hex');
 
-    const hash = (await scrypt(password, salt, 32)) as Buffer;
+    const hash = (await scrypt(body.password, salt, 32)) as Buffer;
 
     const result = salt + '.' + hash.toString('hex');
 
     const user1 = await this.usersService.create(
-      email,
+      body.email,
       result,
-      name,
-      surname,
-      telephone_number,
-      role,
+      body.name,
+      body.surname,
+      body.telephone_number,
+      body.role,
     );
     return this.login(user1);
   }

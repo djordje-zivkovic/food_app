@@ -28,14 +28,14 @@ export class MealController {
   //   }
 
   @Post()
-  @Roles(Role.Owner)
+  @Roles(Role.OWNER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   createMeal(@Body() body: CreateMealDto, @Req() request) {
     return this.mealService.create(body, request);
   }
 
   @Put(':id')
-  @Roles(Role.Owner)
+  @Roles(Role.OWNER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   updateMeal(@Param('id') id, @Body() body: UpdateMealDto, @Req() request) {
     return this.mealService.updateMeal(id, body, request);

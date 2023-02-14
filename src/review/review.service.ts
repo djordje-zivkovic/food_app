@@ -21,7 +21,7 @@ export class ReviewService {
   ) {}
 
   async create(reviewDto: CreateReviewDto, request) {
-    if (request.user.role !== Role.Client) {
+    if (request.user.role !== Role.CLIENT) {
       throw new UnauthorizedException('Only client can create a review');
     }
     const review = this.repo.create(reviewDto);

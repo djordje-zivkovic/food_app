@@ -48,6 +48,7 @@ export class MealService {
       .createQueryBuilder()
       .update(Meal)
       .set(mealDto)
+      .where('id = :id', { id: meal.id })
       .execute();
   }
 
