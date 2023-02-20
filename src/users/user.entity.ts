@@ -1,4 +1,7 @@
-import { Restaurant } from 'src/restaurant/restaurant.entity';
+import { Exclude } from 'class-transformer';
+import { Role } from '../enums/role.enum';
+import { Restaurant } from '../restaurant/restaurant.entity';
+import { Review } from '../review/review.entity';
 import {
   Column,
   Entity,
@@ -7,6 +10,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Order } from '../order/order.entity';
 
 @Entity()
 export class User {
@@ -14,7 +18,7 @@ export class User {
   id: number;
   @Column()
   email: string;
-  @Column()
+  @Column({ select: false })
   password: string;
   @Column()
   name: string;
@@ -22,7 +26,22 @@ export class User {
   surname: string;
   @Column()
   telephone_number: string;
+  @Column({ default: false })
+  isEmailConfirmed: boolean;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.CLIENT,
+  })
+  role: Role;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   @OneToMany(() => Restaurant, (restaurant) => restaurant.user)
   restaurants: Restaurant[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
 }

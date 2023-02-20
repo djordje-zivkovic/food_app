@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Role } from '../enums/role.enum';
 import { User } from './user.entity';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class UsersService {
     name: string,
     surname: string,
     telephone_number: string,
+    role: Role,
   ) {
     const user = this.repo.create({
       email,
@@ -20,19 +22,42 @@ export class UsersService {
       name,
       surname,
       telephone_number,
+      role,
     });
     return this.repo.save(user);
   }
 
-  async FindById(id: number) {
-    const user1 = await this.repo.findOneBy({ id });
-    if (!user1) {
-      throw new NotFoundException('User not found');
-    }
-    return user1;
+  async findAllUsers() {
+    return await this.repo.find({
+      relations: {
+        restaurants: true,
+        reviews: true,
+        orders: true,
+      },
+    });
   }
 
-  async findByEmail(email: string) {
-    return this.repo.findOneBy({ email });
+  async findById(id: number) {
+    return await this.repo.findOne({
+      where: { id },
+      relations: { restaurants: true },
+    });
+  }
+
+  async findByEmail(email: string, includePassword = false) {
+    return await this.repo
+      .createQueryBuilder()
+      .where({ email: email })
+      .addSelect(includePassword ? 'User.password' : null)
+      .getOne();
+  }
+
+  async markEmailAsConfirmed(email: string) {
+    return this.repo.update(
+      { email },
+      {
+        isEmailConfirmed: true,
+      },
+    );
   }
 }
