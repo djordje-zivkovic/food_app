@@ -4,3 +4,4 @@ The API allows customers to browse restaurants, place orders, and view their ord
 
 The API is built using NestJS, a progressive Node.js framework, and is intended for educational purposes, allowing developers to practice building a basic API with user authentication and data persistence.
 
+Postman : https://documenter.getpostman.com/view/23768537/2s93CKNtYx
