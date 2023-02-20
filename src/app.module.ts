@@ -21,26 +21,26 @@ import { Meal } from './meal/meal.entity';
 import { EmailModule } from './email/email.module';
 import * as Joi from 'joi';
 
+require('dotenv').config();
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
-        EMAIL_SERVICE: Joi.string().required(),
-        EMAIL_USER: Joi.string().required(),
-        EMAIL_PASSWORD: Joi.string().required(),
         JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
         JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         EMAIL_CONFIRMATION_URL: Joi.string().required(),
       }),
     }),
+    // TODO change to env's
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: '127.0.0.1',
-      port: 3306,
-      username: 'root',
-      password: 'password',
-      database: 'food_app',
+      type: process.env.DATABASE_TYPE as 'mysql' | 'postgres' | 'sqlite',
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
       entities: [User, Restaurant, Review, Order, DailyMenu, Meal],
       synchronize: true,
       autoLoadEntities: true,
