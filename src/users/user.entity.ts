@@ -26,6 +26,8 @@ export class User {
   surname: string;
   @Column()
   telephone_number: string;
+  @Column({ default: false })
+  isEmailConfirmed: boolean;
 
   @Column({
     type: 'enum',

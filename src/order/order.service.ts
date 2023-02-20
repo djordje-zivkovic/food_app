@@ -28,6 +28,17 @@ export class OrderService {
     return this.repo.save(order);
   }
 
+  //   return await this.repo.findOne({
+  //     where: { id },
+  //     relations: { restaurants: true },
+  //   });
+
+  async getMyOrders(userId) {
+    return this.repo.find({
+      where: { user: userId },
+    });
+  }
+
   async getAllOrders() {
     return this.repo.find({
       relations: {

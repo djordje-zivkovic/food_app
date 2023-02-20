@@ -18,10 +18,22 @@ import { DailyMenuModule } from './daily-menu/daily-menu.module';
 import { DailyMenu } from './daily-menu/daily-menu.entity';
 import { MealModule } from './meal/meal.module';
 import { Meal } from './meal/meal.entity';
+import { EmailModule } from './email/email.module';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: Joi.object({
+        EMAIL_SERVICE: Joi.string().required(),
+        EMAIL_USER: Joi.string().required(),
+        EMAIL_PASSWORD: Joi.string().required(),
+        JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
+        JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        EMAIL_CONFIRMATION_URL: Joi.string().required(),
+      }),
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '127.0.0.1',
@@ -41,6 +53,7 @@ import { Meal } from './meal/meal.entity';
     OrderModule,
     DailyMenuModule,
     MealModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],

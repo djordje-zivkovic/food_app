@@ -16,8 +16,16 @@ export class OrderController {
   createOrder(@Body() body: CreateOrderDto, @Req() request) {
     return this.orderService.createOrder(body, request);
   }
+
   @Get()
   getAllOrders() {
     return this.orderService.getAllOrders();
+  }
+
+  @Roles(Role.CLIENT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('/mine')
+  getMyOrders(@Req() request) {
+    return this.orderService.getMyOrders(request.user.userId);
   }
 }
