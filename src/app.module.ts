@@ -33,7 +33,6 @@ require('dotenv').config();
         EMAIL_CONFIRMATION_URL: Joi.string().required(),
       }),
     }),
-    // TODO change to env's
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql' | 'postgres' | 'sqlite',
       host: process.env.DATABASE_HOST,
