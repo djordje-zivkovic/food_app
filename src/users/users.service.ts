@@ -51,4 +51,13 @@ export class UsersService {
       .addSelect(includePassword ? 'User.password' : null)
       .getOne();
   }
+
+  async markEmailAsConfirmed(email: string) {
+    return this.repo.update(
+      { email },
+      {
+        isEmailConfirmed: true,
+      },
+    );
+  }
 }

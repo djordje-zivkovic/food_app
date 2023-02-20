@@ -9,10 +9,11 @@ export default class EmailService {
 
   constructor(private readonly configService: ConfigService) {
     this.nodemailerTransport = createTransport({
-      service: configService.get('EMAIL_SERVICE'),
+      host: this.configService.get('TRAPMAIL_HOST'),
+      port: this.configService.get('TRAPMAIL_PORT'),
       auth: {
-        user: configService.get('EMAIL_USER'),
-        pass: configService.get('EMAIL_PASSWORD'),
+        user: this.configService.get('TRAPMAIL_AUTH_USER'),
+        pass: this.configService.get('TRAPMAIL_AUTH_PASS'),
       },
     });
   }
