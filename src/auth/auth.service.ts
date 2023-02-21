@@ -5,12 +5,12 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
-import { Role } from '../enums/role.enum';
 import { User } from '../users/user.entity';
 import { promisify } from 'util';
 import { UsersService } from '../users/users.service';
-import EmailService from '../email/email.service';
 import { EmailConfirmationService } from '../email/emailConfirmation.service';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { Role } from '../enums/role.enum';
 
 const scrypt = promisify(_scrypt);
 
@@ -33,13 +33,14 @@ export class AuthService {
     const hash = (await scrypt(pass, salt, 32)) as Buffer;
 
     if (storedHash === hash.toString('hex')) {
-      const { password, ...result } = user; // get all information from user except from password
+      const result = { ...user };
+      delete result.password;
       return result;
     }
     return null;
   }
 
-  async signup(body) {
+  async signup(body: CreateUserDto) {
     const user = await this.usersService.findByEmail(body.email);
     if (user) {
       throw new BadRequestException('email in use');
@@ -51,16 +52,22 @@ export class AuthService {
 
     const result = salt + '.' + hash.toString('hex');
 
-    const user1 = await this.usersService.create(
-      body.email,
-      result,
-      body.name,
-      body.surname,
-      body.telephone_number,
-      body.role,
-    );
+    const newUser = {
+      email: body.email,
+      password: result,
+      name: body.name,
+      surname: body.surname,
+      telephone_number: body.telephone_number,
+      role: body.role,
+    };
+
+    const user1 = await this.usersService.create(newUser);
     await this.emailService.sendVerificationLink(body.email);
-    return this.login(user1);
+    if (newUser.role === Role.CLIENT) {
+      return this.login(user1);
+    } else {
+      return 'New User is created';
+    }
   }
 
   async login(user: User) {
