@@ -11,6 +11,7 @@ import { UsersService } from '../users/users.service';
 import { EmailConfirmationService } from '../email/emailConfirmation.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { Role } from '../enums/role.enum';
+import { ConfigService } from '@nestjs/config';
 
 const scrypt = promisify(_scrypt);
 
@@ -20,6 +21,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private emailService: EmailConfirmationService,
+    private configService: ConfigService,
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
@@ -76,5 +78,37 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async createInitialAdmin() {
+    const email = this.configService.get('INITIAL_ADMIN_EMAIL');
+    const password = this.configService.get('INITAL_ADMIN_PASSWORD');
+    const name = 'Admin';
+    const surname = 'User';
+    const telephone_number = '1234567890';
+    const role = Role.ADMIN;
+
+    const existingUser = await this.usersService.findByEmail(email);
+    if (existingUser) {
+      return;
+    }
+
+    const salt = randomBytes(8).toString('hex');
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+    const passwordHash = salt + '.' + hash.toString('hex');
+
+    const newAdmin = {
+      email,
+      password: passwordHash,
+      name,
+      surname,
+      telephone_number,
+      role,
+    };
+
+    const createdAdmin = await this.usersService.create(newAdmin);
+    console.log('Created initial admin user:', createdAdmin);
+
+    return createdAdmin;
   }
 }
