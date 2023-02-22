@@ -8,8 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role } from '../enums/role.enum';
 import { UsersService } from '../users/users.service';
-import { createRestaurantDto } from './dtos/create-restaurant.dto';
-import { updateRestaurantDto } from './dtos/update-restaurant.dto';
+import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
+import { UpdateRestaurantDto } from './dtos/update-restaurant.dto';
 import { Restaurant } from './restaurant.entity';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class RestaurantService {
     private usersService: UsersService,
   ) {}
 
-  async create(reportDto: createRestaurantDto) {
+  async create(reportDto: CreateRestaurantDto) {
     const restaurant = this.repo.create(reportDto);
     restaurant.user = await this.usersService.findById(reportDto.userId);
     if (!restaurant.user) {
@@ -36,7 +36,7 @@ export class RestaurantService {
     if (!restaurant) {
       throw new NotFoundException('Restaurant not found');
     }
-    return this.repo
+    return await this.repo
       .createQueryBuilder('restaurant')
       .delete()
       .from(Restaurant)
@@ -68,7 +68,7 @@ export class RestaurantService {
 
   async updateRestaurant(
     restaurantId: number,
-    body: updateRestaurantDto,
+    body: UpdateRestaurantDto,
     userId: number,
   ) {
     await this.validateRestaurantOwnership(userId, restaurantId);

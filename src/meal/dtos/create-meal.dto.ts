@@ -1,5 +1,4 @@
 import { IsEnum, IsNumber, IsString } from 'class-validator';
-import { Column } from 'typeorm';
 import { Category } from '../../enums/category.enum';
 
 export class CreateMealDto {

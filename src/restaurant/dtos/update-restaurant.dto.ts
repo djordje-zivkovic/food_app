@@ -1,7 +1,6 @@
-import { Expose, Transform } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
-export class updateRestaurantDto {
+export class UpdateRestaurantDto {
   @IsString()
   name: string;
   @IsString()
