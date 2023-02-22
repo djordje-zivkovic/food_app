@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DailyMenuModule } from '../daily-menu/daily-menu.module';
-import { DailyMenuService } from '../daily-menu/daily-menu.service';
 import { MealModule } from '../meal/meal.module';
 import { UsersModule } from '../users/users.module';
 import { OrderController } from './order.controller';

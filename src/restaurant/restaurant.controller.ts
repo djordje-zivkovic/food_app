@@ -5,18 +5,18 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Req,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../decorators/role.decorator';
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
-import { createRestaurantDto } from './dtos/create-restaurant.dto';
-import { updateRestaurantDto } from './dtos/update-restaurant.dto';
+import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
+import { UpdateRestaurantDto } from './dtos/update-restaurant.dto';
 import { RestaurantService } from './restaurant.service';
 
 @Controller('restaurant')
@@ -26,12 +26,12 @@ export class RestaurantController {
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
-  createRestaurant(@Body() body: createRestaurantDto) {
+  createRestaurant(@Body() body: CreateRestaurantDto) {
     return this.restaurantService.create(body);
   }
 
   @Delete(':id')
-  deleteRestaurant(@Param('id') id) {
+  deleteRestaurant(@Param('id', ParseIntPipe) id: number) {
     if (!id) {
       throw new BadRequestException('You have to enter id');
     }
@@ -42,8 +42,8 @@ export class RestaurantController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   updateRestaurant(
-    @Body() body: updateRestaurantDto,
-    @Param('id') id,
+    @Body() body: UpdateRestaurantDto,
+    @Param('id', ParseIntPipe) id: number,
     @Req() request,
   ) {
     return this.restaurantService.updateRestaurant(

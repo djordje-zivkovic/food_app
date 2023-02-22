@@ -1,5 +1,6 @@
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { User } from './user.entity';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -11,9 +12,9 @@ export class UsersController {
     return this.usersService.findAllUsers();
   }
 
-  @UseGuards(JwtAuthGuard) // Only logged user can access this route
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  getProfile(@Request() { user }): User {
+    return user;
   }
 }

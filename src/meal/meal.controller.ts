@@ -20,13 +20,6 @@ import { MealService } from './meal.service';
 export class MealController {
   constructor(private mealService: MealService) {}
 
-  //   @Post()
-  //   @Roles(Role.Owner)
-  //   @UseGuards(JwtAuthGuard, RolesGuard)
-  //   createDailyMenu(@Body() body: CreateDailyMenuDto) {
-  //     return this.dailyMenuService.create(body);
-  //   }
-
   @Post()
   @Roles(Role.OWNER)
   @UseGuards(JwtAuthGuard, RolesGuard)

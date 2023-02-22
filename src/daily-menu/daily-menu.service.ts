@@ -1,13 +1,6 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { Meal } from '../meal/meal.entity';
 import { MealService } from '../meal/meal.service';
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { UsersService } from '../users/users.service';

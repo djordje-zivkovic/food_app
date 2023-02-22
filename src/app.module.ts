@@ -20,8 +20,9 @@ import { MealModule } from './meal/meal.module';
 import { Meal } from './meal/meal.entity';
 import { EmailModule } from './email/email.module';
 import * as Joi from 'joi';
+import { config } from 'dotenv';
 
-require('dotenv').config();
+config();
 
 @Module({
   imports: [

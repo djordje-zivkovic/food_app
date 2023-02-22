@@ -1,4 +1,11 @@
-import { IsEmail, IsMobilePhone, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsMobilePhone,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { Role } from '../../enums/role.enum';
 export class CreateUserDto {
   @IsEmail()
   email: string;
@@ -12,4 +19,6 @@ export class CreateUserDto {
   @IsMobilePhone()
   @IsString()
   telephone_number: string;
+  @IsEnum(Role)
+  role: Role = Role.CLIENT;
 }

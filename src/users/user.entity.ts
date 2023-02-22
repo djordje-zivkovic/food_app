@@ -1,15 +1,7 @@
-import { Exclude } from 'class-transformer';
 import { Role } from '../enums/role.enum';
 import { Restaurant } from '../restaurant/restaurant.entity';
 import { Review } from '../review/review.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../order/order.entity';
 
 @Entity()
